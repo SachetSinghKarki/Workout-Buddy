@@ -11,7 +11,7 @@ export const useSignup = () => {
     setError(null) // Corrected this to set `null` instead of 'null'
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/signup', {
+      const response = await fetch('https://workout-buddy-beryl.vercel.app/api/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
