@@ -25,13 +25,7 @@ app.use(express.json());
 app.use('/api/workouts',workoutRoutes)
 app.use('/api/users',userRoutes)
 
-//listen for port
 
-// app.listen(4000, () =>  {
-
-// console.log('Server running on port 4000'));
-    // }
-// 
 
 //connect to db
 
