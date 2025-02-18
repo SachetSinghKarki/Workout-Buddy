@@ -10,17 +10,17 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault()
 //     const workout = { title, reps, load }
-    
+
 //       const response = await fetch('http://localhost:4000/api/workouts', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify(workout),
 //       })
-     
+
 //       const json = await response.json()
 
 //       if(!response.ok) {
-//         setError(json.error) 
+//         setError(json.error)
 //       }
 //       if(response.ok) {
 //         setError(null)
@@ -30,8 +30,7 @@
 //         console.log('Workouts loaded successfully', json)
 
 //       }
-  
-  
+
 // }
 //   return (
 //     <div>
@@ -56,61 +55,57 @@
 //         />
 //         <button type="submit">Add Workout</button>
 //       </form>
-      
+
 //     </div>
 //   )
 // }
 
 // export default WorkoutForm
 
-
-
-
-
-
-
-
-import React, { useState } from 'react';
-import { useWorkoutsContext } from '../../Hooks/UseWorkoutContext';
-import { useAuthContext } from '../../Hooks/UseAuthContext';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import styles for toast
+import React, { useState } from "react";
+import { useWorkoutsContext } from "../../Hooks/UseWorkoutContext";
+import { useAuthContext } from "../../Hooks/UseAuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import styles for toast
 
 const WorkoutForm = () => {
   const { dispatch } = useWorkoutsContext();
-  const [title, setTitle] = useState('');
-  const [reps, setReps] = useState('');
-  const [load, setLoad] = useState('');
+  const [title, setTitle] = useState("");
+  const [reps, setReps] = useState("");
+  const [load, setLoad] = useState("");
   const [error, setError] = useState(null);
   const [emptyField, setEmptyField] = useState([]);
 
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!user) {
-      toast.error('Please sign in to add a workout.', {
-        position: 'bottom-right',
+    if (!user) {
+      toast.error("Please sign in to add a workout.", {
+        position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'colored',
+        theme: "colored",
       });
       return;
     }
     const workout = { title, reps, load };
 
-    const response = await fetch('http://localhost:5000/api/workouts', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-         'Authorization': `Bearer ${user.token}`
-       },
-      body: JSON.stringify(workout),
-    });
+    const response = await fetch(
+      "https://workout-buddy-beryl.vercel.app/api/workouts",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(workout),
+      }
+    );
 
     const json = await response.json();
 
@@ -119,21 +114,21 @@ const WorkoutForm = () => {
       setEmptyField(json.emptyField);
     } else {
       setError(null);
-      setTitle('');
-      setReps('');
-      setLoad('');
+      setTitle("");
+      setReps("");
+      setLoad("");
       setEmptyField([]);
-      dispatch({ type: 'CREATE_WORKOUTS', payload: json });
+      dispatch({ type: "CREATE_WORKOUTS", payload: json });
 
       // Show success toast notification
-      toast.success('Workout added successfully!', {
-        position: 'bottom-right',
+      toast.success("Workout added successfully!", {
+        position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'colored',
+        theme: "colored",
       });
     }
   };
@@ -157,7 +152,10 @@ const WorkoutForm = () => {
 
         {/* Title Field */}
         <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700 font-medium mb-2">
+          <label
+            htmlFor="title"
+            className="block text-gray-700 font-medium mb-2"
+          >
             Workout Name
           </label>
           <input
@@ -167,17 +165,24 @@ const WorkoutForm = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className={`w-full p-3 border ${
-              emptyField.includes('title') ? 'border-red-500' : 'border-gray-300'
+              emptyField.includes("title")
+                ? "border-red-500"
+                : "border-gray-300"
             } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
-          {emptyField.includes('title') && (
-            <p className="text-red-500 text-sm mt-1">Workout name is required.</p>
+          {emptyField.includes("title") && (
+            <p className="text-red-500 text-sm mt-1">
+              Workout name is required.
+            </p>
           )}
         </div>
 
         {/* Reps Field */}
         <div className="mb-4">
-          <label htmlFor="reps" className="block text-gray-700 font-medium mb-2">
+          <label
+            htmlFor="reps"
+            className="block text-gray-700 font-medium mb-2"
+          >
             Reps
           </label>
           <input
@@ -187,17 +192,20 @@ const WorkoutForm = () => {
             value={reps}
             onChange={(e) => setReps(e.target.value)}
             className={`w-full p-3 border ${
-              emptyField.includes('reps') ? 'border-red-500' : 'border-gray-300'
+              emptyField.includes("reps") ? "border-red-500" : "border-gray-300"
             } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
-          {emptyField.includes('reps') && (
+          {emptyField.includes("reps") && (
             <p className="text-red-500 text-sm mt-1">Reps are required.</p>
           )}
         </div>
 
         {/* Load Field */}
         <div className="mb-6">
-          <label htmlFor="load" className="block text-gray-700 font-medium mb-2">
+          <label
+            htmlFor="load"
+            className="block text-gray-700 font-medium mb-2"
+          >
             Load (kg)
           </label>
           <input
@@ -207,10 +215,10 @@ const WorkoutForm = () => {
             value={load}
             onChange={(e) => setLoad(e.target.value)}
             className={`w-full p-3 border ${
-              emptyField.includes('load') ? 'border-red-500' : 'border-gray-300'
+              emptyField.includes("load") ? "border-red-500" : "border-gray-300"
             } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
-          {emptyField.includes('load') && (
+          {emptyField.includes("load") && (
             <p className="text-red-500 text-sm mt-1">Load is required.</p>
           )}
         </div>
@@ -228,4 +236,3 @@ const WorkoutForm = () => {
 };
 
 export default WorkoutForm;
-

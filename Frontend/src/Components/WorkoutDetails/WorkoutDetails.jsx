@@ -24,31 +24,33 @@ import { useAuthContext } from "../../Hooks/UseAuthContext";
 import { toast } from "react-toastify";
 
 const WorkoutDetails = ({ workout }) => {
-
   const { dispatch } = useWorkoutsContext();
 
   const { user } = useAuthContext();
-  
+
   // Check if user is logged in and has permission to delete workout
   const handleClick = async () => {
-    if(!user){
+    if (!user) {
       toast.error("You must be logged in to delete workouts.");
       return;
     }
-    const response = await fetch("http://localhost:5000/api/workouts/" + workout._id, {
-      method: "DELETE",
-      headers: {
-         'Authorization': `Bearer ${user.token}`
-      },
-    });
-  
+    const response = await fetch(
+      "https://workout-buddy-beryl.vercel.app/api/workouts/" + workout._id,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-  
+
     dispatch({ type: "DELETE_WORKOUT", payload: { _id: workout._id } });
   };
-  
+
   // Format the date
   const formattedDate = new Date(workout.createdAt).toLocaleDateString(
     "en-US",
